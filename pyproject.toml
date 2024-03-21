@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ihaveasecret"
+version = "0.1.0"
+description = "transfer secret informations over the web"
+authors = ["Julien Rialland <julien.rialland@gmail.com>"]
+license = "BSD"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+redis = "^5.0.3"
+Flask = "^3.0.2"
+pycryptodome = "^3.20.0"
+waitress = "^3.0.0"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.9.0"
+black = "^24.3.0"
+pytest = "^8.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
