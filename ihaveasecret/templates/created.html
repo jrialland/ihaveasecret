@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title"><i class="ri-check-line"></i>&nbsp;Secret created</h1>
+
+    <div class="notification is-success">
+        <p><i class="ri-checkbox-circle-line"></i>Your secret has been created, you can share this link to allow someone to read it:</p>
+        <div class="control">
+            <div class="columns">
+                <div class="column is-11">
+                    <input class="input" type="text" value="{{ message_url }}" readonly>
+                </div>
+                <div class="column is-1">
+                    <button class="button is-primary" onclick="navigator.clipboard.writeText('{{ message_url }}')"><i class="ri-file-copy-line"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification is-info">
+        <p><i class="ri-information-line"></i>Be informed:</p>
+        <p>Your secret has been stored on the server and will be deleted after the time to live you've chosen, or when someone opens the link.</p>
+        <p>Therefore, the generated link can only be opened once.</p>
+    </div>
+
+    <a href="{{ url_for('ihaveasecret.create') }}" class="button is-primary">Create another secret</a>
+{% endblock %}

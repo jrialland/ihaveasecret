@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+
+  redis:
+    image: docker.io/library/redis:7.2-alpine
+    network: internal
+
+  ihaveasecret:
+    build:
+      context: .
+      dockerfile: Containerfile
+    network: internal
+    ports:
+      - "5000:5000"
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      FLASK_APP: ihaveasecret
+      FLASK_ENV: development
+      FLASK_DEBUG: 1
+      APP_SECRET_KEY: testkey
+    volumes:
+      - ./ihaveasecret:/app/ihaveasecret
+    command: ['flask', 'run', '--host=0.0.0.0', '--port=5000']
+
+networks:
+  internal:
+    driver: bridge
