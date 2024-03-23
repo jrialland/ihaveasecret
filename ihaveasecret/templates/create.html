@@ -2,43 +2,44 @@
 
 {% block content %}
 
-    <h1 class="title"><i class="ri-spy-line"></i>&nbsp;Create a secret</h1>
+<h1 class="title"><i class="ri-spy-line"></i>&nbsp;{% trans %}Create a secret{% endtrans %}</h1>
 
-    {% if error %}
-        <div class="notification is-danger">
-            <p><i class="ri-error-warning-line"></i>{{ error }}</p>
-        </div>
-    {% endif %}
+{% if error %}
+<div class="notification is-danger">
+    <p><i class="ri-error-warning-line"></i>{{ error }}</p>
+</div>
+{% endif %}
 
-    <form method="post">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <div class="field">
-            <label class="label">Message</label>
-            <div class="control">
-                <textarea class="textarea" name="message" placeholder="Your secret message">{% if message %}{{ message }}{% endif %}</textarea>
-            </div>
+<form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="field">
+        <label class="label">Message</label>
+        <div class="control">
+            <textarea class="textarea" name="message"
+                placeholder="{{ gettext('Your secret message') }}">{% if message %}{{ message }}{% endif %}</textarea>
         </div>
-        <div class="field">
-            <label class="label">{{ gettext('Time to live') }}</label>
-            <div class="select">
-                <select name="ttl">
-                    {% for (k, v, _) in possible_ttls %}
-                        <option value="{{ k }}">{{ v }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+    </div>
+    <div class="field">
+        <label class="label">{% trans %}Time to live{% endtrans %}</label>
+        <div class="select">
+            <select name="ttl">
+                {% for (k, v, _) in possible_ttls %}
+                <option value="{{ k }}">{{ v }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <div class="field">
-            <label class="label"><i>({{ gettext('optional') }})</i> {{ gettext('Password') }}</label>
-            <div class="control">
-                <input class="input" type="password" name="password" placeholder="Your secret password">
-            </div>
+    </div>
+    <div class="field">
+        <label class="label"><i>({{ gettext('optional') }})</i> {{ gettext('Password') }}</label>
+        <div class="control">
+            <input class="input" type="password" name="password" placeholder="{{ gettext('Your secret password') }}">
         </div>
-        <div class="field">
-            <div class="control">
-                <button class="button is-primary">{{ gettext('Create') }}</button>
-            </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <button class="button is-primary">{% trans %}Create{% endtrans %}</button>
         </div>
-    </form>
+    </div>
+</form>
 
 {% endblock %}

@@ -30,13 +30,15 @@ The following table provides guidance on configuring the app:
 |---|---|---|---|---|
 |app.secret_key|/run/secrets/app.secret_key|APP_SECRET_KEY|used for as flask unique key| none (mandatory)|
 |app.url_prefix|/run/secrets/app.url_prefix|APP_URL_PREFIX|path to prepend to all uris| empty|
+|app.proxy_fix|/run/secrets/app.proxy_fix|APP_PROXY_FIX|if set to True, handle X-Forwarded-For header|False|
 |secrets.max_length|/run/secrets/secrets.max_length|SECRETS_MAX_LENGTH|maximum allowed messages length|2048|
 |redis.url|/run/secrets/redis.url|REDIS_URL|redis url|none, in-memory storage is used if missing|
 |passwords.max_attempts|/run/secrets/password.max_attempts|PASSWORDS_MAX_ATTEMPTS|how many tries are allowed|3|
 
+
 TODOs :
 -------
- * Translations
+ * <strike>Translations</strike>
  * <strike>Document configuration keys</strike>
  * javascript : hint on password strength (https://github.com/dropbox/zxcvbn ?)
  * javascript : message length
