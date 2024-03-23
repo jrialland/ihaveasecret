@@ -1,14 +1,13 @@
 ihaveasecret
 ============
 
-A simple web app that allow you to pass secret data to someone by giving him a temporary link.
-Once the link is opened the secret message is deleted from the server.
+A straightforward web application that enables users to share confidential information with others via temporary links. Once the recipient opens the link, the secret message is automatically removed from the server.
 
-The secrets are stored in redis, and are encrypted using the app's secret key
+Secrets are stored in Redis and encrypted using the application's secret key.
 
-The application is intentinally as simple as possible in order to fulfill strong security requirements : almost no javascript, simple css, no fancy things.
+The application is intentionally designed to be as simple as possible to meet stringent security standards: minimal JavaScript, basic CSS, and no extravagant features.
 
-It uses the following components:
+It employs the following components:
  * [python](https://www.python.org/) 3.12
  * [flask](https://flask.palletsprojects.com/en/3.0.x/) ( and [waitress](https://github.com/Pylons/waitress) )
  * [pycryptodome](https://www.pycryptodome.org/)
@@ -19,14 +18,13 @@ It uses the following components:
 Configuration
 -----
 
-Configuration can be done either by providing docker secrets, environment variables, or a configuration file.
-The resolution of configuration settings is done this way :
+Configuration can be accomplished by utilizing Docker secrets, environment variables, or a configuration file. The resolution of configuration settings follows this sequence:
 
-1. look for a file is /run/secrets with the same name. If this file exists, the value is the file's content.
-2. check if an environment variable with that name exists.
-3. look for the key in the configuration file "config.json"
+1. Check for a file named the same as the setting in the directory /run/secrets. If such a file exists, the value is extracted from the file's content.
+2. Verify if an environment variable with the corresponding name exists.
+3. Search for the key in the configuration file named "config.json".
 
-This table explains how to configure the app :
+The following table provides guidance on configuring the app:
 
 | key | secret file | environment variable | definition | default value |
 |---|---|---|---|---|
@@ -57,6 +55,12 @@ production :
 
 using docker or podman : `docker build -t ihaveasecret -f Containerfile`
 
+i18n
+-----
+`pybabel extract -F babel.cfg -o messages.pot .`
+`pybabel init -i messages.pot -d translations -l fr`
+`pybabel compile -d translations`
+`pybabel update -i messages.pot -d translations`
 
 Screenshots :
 -------------

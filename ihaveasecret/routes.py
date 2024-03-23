@@ -12,15 +12,16 @@ from .configuration import configurationStore
 from .secretstore import secretStore
 from .util import random_string, build_url
 from pathlib import Path
+from flask_babel import gettext, ngettext
 
-possible_ttls = ["1 hour", "1 day", "1 week"]
+possible_ttls = [
+    ("1 hour", gettext('1 hour'), timedelta(hours=1)),
+    ("1 day", gettext('1 day'), timedelta(days=1)),
+    ("1 week", gettext('1 week'), timedelta(weeks=1)),
+]
 
-timedeltas = {
-    "1 hour": timedelta(hours=1),
-    "1 day": timedelta(days=1),
-    "1 week": timedelta(weeks=1),
-}
-
+possible_ttls_keys = [ttl[0] for ttl in possible_ttls]
+timedeltas = {ttl[0]: ttl[2] for ttl in possible_ttls}
 
 def check_csrf_token():
     if request.method == "POST":
@@ -45,7 +46,7 @@ def create_routes(url_prefix: str) -> Blueprint:
     def display_create_page():
         csrf_token = session["csrf_token"] = random_string(32)
         return render_template(
-            "create.html", possible_ttls=timedeltas.keys(), csrf_token=csrf_token
+            "create.html", possible_ttls=possible_ttls, csrf_token=csrf_token
         )
 
     @bp.route("/create", methods=["POST"])
@@ -54,14 +55,13 @@ def create_routes(url_prefix: str) -> Blueprint:
         message = request.form.get("message")
         ttl = request.form["ttl"]
         password = request.form.get("password")
-
-        assert ttl in possible_ttls, f"Invalid TTL: {ttl}"
+        assert ttl in possible_ttls_keys, f"Invalid TTL: {ttl}"
 
         if not message:
             csrf_token = session["csrf_token"] = random_string(32)
             return render_template(
                 "create.html",
-                possible_ttls=timedeltas.keys(),
+                possible_ttls=possible_ttls,
                 error="Message is required",
                 csrf_token=csrf_token,
             )
@@ -70,8 +70,8 @@ def create_routes(url_prefix: str) -> Blueprint:
             csrf_token = session["csrf_token"] = random_string(32)
             return render_template(
                 "create.html",
-                possible_ttls=timedeltas.keys(),
-                error=f"Message is too long (max {max_message_length} characters)",
+                possible_ttls=possible_ttls,
+                error=ngettext("Message is too long (max %(max_message_length)s characters)", max_message_length),
                 message=message,
                 csrf_token=csrf_token,
             )
@@ -94,7 +94,7 @@ def create_routes(url_prefix: str) -> Blueprint:
                 render_template(
                     "error.html",
                     level="danger",
-                    message="Sorry, that secret has already been seen or does not exist.",
+                    message=gettext("Sorry, that secret has already been seen or does not exist."),
                 ),
                 404,
             )
@@ -132,7 +132,7 @@ def create_routes(url_prefix: str) -> Blueprint:
                 "check_password.html",
                 message_key=message_key,
                 remaining_attempts=remaining_attempts,
-                error="Invalid password. Please try again.",
+                error=gettext("Incorrect password. Please try again."),
                 csrf_token=csrf_token,
             )
         else:
@@ -142,7 +142,7 @@ def create_routes(url_prefix: str) -> Blueprint:
                 render_template(
                     "error.html",
                     level="danger",
-                    message="The secret has been deleted due to too many incorrect password attempts",
+                    message=gettext("The secret has been deleted because of too many incorrect password attempts."),
                 ),
                 404,
             )
