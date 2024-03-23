@@ -23,16 +23,23 @@ class ConfigurationStore:
         """
         secret_path = Path("/run/secrets") / key
         if secret_path.exists():
-            return secret_path.read_text()
+            value = secret_path.read_text().strip()
+            logging.info(f"Resolved {key} from {secret_path}")
         else:
             return None
 
     def _get_from_env(self, key):
         envvar = key.upper().replace(".", "_")
-        return os.environ.get(envvar)
-
+        value = os.environ.get(envvar)
+        if value:
+            logging.info(f"Resolved {key} from environment variable {envvar}")
+        return value
+    
     def _get_from_file(self, key):
-        return self._config.get(key)
+        value = self._config.get(key)
+        if value:
+            logging.info(f"Resolved {key} from configuration file")
+        return value
 
     def get(self, key, default=None):
         """

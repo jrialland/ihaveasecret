@@ -1,26 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="title"><i class="ri-check-line"></i>&nbsp;Secret created</h1>
+<h1 class="title"><i class="ri-check-line"></i>&nbsp;{% trans %}Secret created{% endtrans %}</h1>
 
-    <div class="notification is-success">
-        <p><i class="ri-checkbox-circle-line"></i>{% trans %}Your secret has been created. You can share this link to grant someone access to read it.{% endtrans %}:</p>
-        <div class="control">
-            <div class="columns">
-                <div class="column is-11">
-                    <input class="input" type="text" value="{{ message_url }}" readonly>
-                </div>
-                <div class="column is-1">
-                    <button class="button is-primary" onclick="navigator.clipboard.writeText('{{ message_url }}')"><i class="ri-file-copy-line"></i></button>
-                </div>
+<div class="notification is-success">
+    <p><i class="ri-checkbox-circle-line"></i>{% trans %}Your secret has been created. You can share this link to grant
+        someone access to read it.{% endtrans %}:</p>
+    <div class="control">
+        <div class="columns">
+            <div class="column is-11">
+                <input class="input" type="text" value="{{ message_url }}" readonly>
+            </div>
+            <div class="column is-1">
+                <button class="button is-primary" onclick="navigator.clipboard.writeText('{{ message_url }}')"><i
+                        class="ri-file-copy-line"></i></button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="notification is-info">
-        <p><i class="ri-information-line"></i>&nbsp;{% trans %}Your secret has been stored on the server and will be deleted either after the chosen time to live expires or when someone opens the link.{% endtrans %}</p>
-        <p>{% trans %}Therefore, the generated link can only be opened once.{% endtrans %}</p>
-    </div>
+<div class="notification is-info">
+    <p><i class="ri-information-line"></i>&nbsp;{% trans %}Your secret has been stored on the server and will be deleted
+        either after the chosen time to live expires or when someone opens the link.{% endtrans %}</p>
+    <p>{% trans %}Therefore, the generated link can only be opened once.{% endtrans %}</p>
+</div>
 
-    <a href="{{ url_for('ihaveasecret.create') }}" class="button is-primary">{% trans %}Create another secret{% endtrans %}</a>
+<a href="{{ url_for('ihaveasecret.create') }}" class="button is-primary">{% trans %}Create another secret{% endtrans
+    %}</a>
 {% endblock %}
