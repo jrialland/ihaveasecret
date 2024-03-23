@@ -1,5 +1,6 @@
-from flask import Flask, redirect, url_for
-from .config import configurationStore
+from flask import Flask
+from werkzeug.middleware.proxy_fix import ProxyFix
+from .configuration import configurationStore
 from .routes import create_routes
 import logging
 import os
@@ -9,6 +10,7 @@ if os.environ.get("FLASK_ENV") == "development":
 
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 
 app_secret_key = configurationStore.get("app.secret_key")
 assert app_secret_key, "app.secret_key is required"
@@ -19,9 +21,4 @@ if url_prefix:
     assert url_prefix.startswith("/"), "app.url_prefix must start with /"
     assert not url_prefix.endswith("/"), "app.url_prefix must not end with /"
 
-app.register_blueprint(create_routes(), url_prefix=url_prefix)
-
-
-@app.route(url_prefix + "/")
-def home():
-    return redirect(url_for("ihaveasecret.display_create_page"))
+app.register_blueprint(create_routes(url_prefix), url_prefix=url_prefix)

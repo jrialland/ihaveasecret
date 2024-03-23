@@ -17,6 +17,7 @@ waitress = "^3.0.0"
 mypy = "^1.9.0"
 black = "^24.3.0"
 pytest = "^8.1.1"
+podman-compose = "^1.0.6"
 
 [build-system]
 requires = ["poetry-core"]

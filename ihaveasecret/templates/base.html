@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <title>I Have A Secret [{% block title %}{% endblock %}]</title>
+    <title>I Have A Secret</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='spy-line.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
@@ -9,7 +10,7 @@
 <body>
     <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="{{url_for('home')}}">
+            <a class="navbar-item" href="{{url_for('ihaveasecret.index')}}">
                 <i class="ri-spy-line"></i>&nbsp;I Have A Secret
             </a>
         </div>
@@ -23,7 +24,7 @@
     <footer class="footer">
         <div class="content has-text-centered">
             <p>
-                <strong>I Have A Secret</strong> © 2024 <a href="https://github.com/jrialland">jrialland</a>.
+                <strong><a target="_blank" href="https://github.com/jrialland/ihaveasecret">Ihaveasecret</a></strong> © 2024 <a target="_blank" href="https://github.com/jrialland">jrialland</a>.
             </p>
         </div>
     </footer>
