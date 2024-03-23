@@ -36,7 +36,7 @@ The following table provides guidance on configuring the app:
 
 TODOs :
 -------
- * Translations
+ * <strike>Translations</strike>
  * <strike>Document configuration keys</strike>
  * javascript : hint on password strength (https://github.com/dropbox/zxcvbn ?)
  * javascript : message length
