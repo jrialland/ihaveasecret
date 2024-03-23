@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title"><i class="ri-mail-check-line"></i>&nbsp;Read a secret</h1>
+
+
+    <div class="notification is-info">
+        <p><i class="ri-information-line"></i>This message is displayed only once and will not be available anymore if this page is reloaded.</p>
+    </div>
+
+    <div class="notification is-primary">
+        <pre>
+            {{ secret_text }}
+        </pre>
+    </div>
+
+    <a href="{{ url_for('ihaveasecret.create') }}" class="button is-primary">Create another secret</a>
+    
+{% endblock %}

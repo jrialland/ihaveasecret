@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="notification is-{{level}}">
+        <p>
+            {% if level == 'danger' %}
+                <i class="ri-error-warning-line"></i>
+            {% elif level == 'warning' %}
+            <i class="ri-error-warning-line"></i>
+            {% elif level == 'info' %}
+                <i class="ri-information-line"></i>
+            {% elif level == 'success' %}
+                <i class="ri-checkbox-circle-line"></i>
+            {% endif %}
+            &nbsp;{{message}}
+        </p>
+    </div>
+
+    <a href="{{ url_for('ihaveasecret.create') }}" class="button is-primary">Create another secret</a>
+
+{% endblock %}
