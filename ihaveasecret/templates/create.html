@@ -19,24 +19,24 @@
             </div>
         </div>
         <div class="field">
-            <label class="label">Time to live</label>
+            <label class="label">{{ gettext('Time to live') }}</label>
             <div class="select">
                 <select name="ttl">
-                    {% for ttl in possible_ttls %}
-                        <option value="{{ ttl }}">{{ ttl }}</option>
+                    {% for (k, v, _) in possible_ttls %}
+                        <option value="{{ k }}">{{ v }}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
         <div class="field">
-            <label class="label"><i>(optional)</i> Password</label>
+            <label class="label"><i>({{ gettext('optional') }})</i> {{ gettext('Password') }}</label>
             <div class="control">
                 <input class="input" type="password" name="password" placeholder="Your secret password">
             </div>
         </div>
         <div class="field">
             <div class="control">
-                <button class="button is-primary">Create</button>
+                <button class="button is-primary">{{ gettext('Create') }}</button>
             </div>
         </div>
     </form>

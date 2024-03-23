@@ -19,6 +19,10 @@ ADD ihaveasecret /app/ihaveasecret
 # add the executables brought from imported modules into the PATH
 ENV PATH="/app/.venv/bin:${PATH}"
 
+# compile the translations
+RUN cd /app/ihaveasecret && pybabel compile -d translations
+
+# ------------------------------------------------------------------------------
 WORKDIR /app
 EXPOSE 5000
 CMD ["waitress-serve", "--port=5000", "ihaveasecret:app"]
