@@ -38,8 +38,8 @@ document.querySelectorAll('textarea[x-maxlength]').forEach(item => {
 
 });
 
-//for every password input, add a keyup event listener that checks if the password is strong enough
-document.querySelectorAll('input[type="password"]').forEach(item => {
+//for every password input have autocomplete="new-password", add a keyup event listener that checks if the password is strong enough
+document.querySelectorAll('input[type="password"][autocomplete="new-password"]').forEach(item => {
     
     // create a message zone to display the current strength
     let messagezone = document.createElement('div');
