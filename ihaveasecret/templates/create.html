@@ -15,7 +15,7 @@
     <div class="field">
         <label class="label">Message</label>
         <div class="control">
-            <textarea class="textarea" name="message"
+            <textarea class="textarea" name="message" x-maxlength="{{ max_message_length }}"
                 placeholder="{{ gettext('Your secret message') }}">{% if message %}{{ message }}{% endif %}</textarea>
         </div>
     </div>

@@ -12,7 +12,7 @@
                 <input class="input" type="text" value="{{ message_url }}" readonly>
             </div>
             <div class="column is-1">
-                <button class="button is-primary" onclick="navigator.clipboard.writeText('{{ message_url }}')"><i
+                <button class="button is-primary" x-clipboard-data="{{message_url}}"><i
                         class="ri-file-copy-line"></i></button>
             </div>
         </div>
