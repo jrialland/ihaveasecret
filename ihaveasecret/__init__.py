@@ -43,11 +43,30 @@ if not app_secret_key:
 app.secret_key = app_secret_key
 
 # ------------------------------------------------------------------------------
-# register the routes
+# response headers configuration
+@app.after_request
+def add_security_headers(response):
+    response.headers["Content-Security-Policy"] = "default-src 'self';"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    return response
+
+# ------------------------------------------------------------------------------
+# register variables in the Jinja context
 url_prefix = configurationStore.get("app.url_prefix", "")
 if url_prefix:
     assert url_prefix.startswith("/"), "app.url_prefix must start with /"
     assert not url_prefix.endswith("/"), "app.url_prefix must not end with /"
 
+@app.context_processor
+def inject_url_prefix():
+    return {
+        "url_prefix": url_prefix,
+        "max_message_length": int(configurationStore.get("secrets.max_length", 2048)),
+    }
+
+# ------------------------------------------------------------------------------
+# register the routes
 logging.info(f"Registering routes with url_prefix: {url_prefix}")
 app.register_blueprint(create_routes(url_prefix), url_prefix=url_prefix)
