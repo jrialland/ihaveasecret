@@ -30,9 +30,12 @@ app.config["LANGUAGES"] = {
     "es": "Español",
 }
 
+def get_locale():
+    return request.accept_languages.best_match(app.config["LANGUAGES"].keys()) or "en"
+
 app.config["BABEL_DEFAULT_LOCALE"] = "en"
 app.config["BABEL_TRANSLATION_DIRECTORIES"] = str(Path(__file__).parent.absolute() / "translations")
-babel = Babel(app, locale_selector=lambda: (request.accept_languages.best_match(app.config["LANGUAGES"].keys()) or "en"))
+babel = Babel(app, locale_selector=get_locale)
 
 # ------------------------------------------------------------------------------
 # secret key configuration : required for session management
@@ -60,10 +63,11 @@ if url_prefix:
     assert not url_prefix.endswith("/"), "app.url_prefix must not end with /"
 
 @app.context_processor
-def inject_url_prefix():
+def inject_jinja_variables():
     return {
         "url_prefix": url_prefix,
         "max_message_length": int(configurationStore.get("secrets.max_length", 2048)),
+        "locale": get_locale(),
     }
 
 # ------------------------------------------------------------------------------
