@@ -40,8 +40,8 @@ TODOs :
 -------
  * <strike>Translations</strike>
  * <strike>Document configuration keys</strike>
- * javascript : hint on password strength (https://github.com/dropbox/zxcvbn ?)
- * javascript : message length
+ * <strike>javascript : hint on password strength (https://github.com/dropbox/zxcvbn ?)</strike>
+ * <strike>javascript : message length</strike>
 
 Development :
 -----------
