@@ -22,7 +22,7 @@
     <div class="field">
         <label class="label">{% trans %}Time to live{% endtrans %}</label>
         <div class="select">
-            <select name="ttl">
+            <select name="ttl" title="{% trans %}Time to live{% endtrans %}">
                 {% for (k, v, _) in possible_ttls %}
                 <option value="{{ k }}">{{ v }}</option>
                 {% endfor %}
