@@ -13,6 +13,7 @@ from .secretstore import secretStore
 from .util import random_string, build_url
 from pathlib import Path
 from flask_babel import gettext, ngettext
+from .csrf_token import check_csrf_token
 
 possible_ttls = [
     ("1 hour", gettext('1 hour'), timedelta(hours=1)),
@@ -22,13 +23,6 @@ possible_ttls = [
 
 possible_ttls_keys = [ttl[0] for ttl in possible_ttls]
 timedeltas = {ttl[0]: ttl[2] for ttl in possible_ttls}
-
-def check_csrf_token():
-    if request.method == "POST":
-        csrf_token = request.form.get("csrf_token")
-        assert csrf_token, "Missing CSRF token"
-        assert csrf_token == session.get("csrf_token"), "Invalid CSRF token"
-
 
 def create_routes(url_prefix: str) -> Blueprint:
 
@@ -44,9 +38,9 @@ def create_routes(url_prefix: str) -> Blueprint:
 
     @bp.route("/create", methods=["GET"])
     def display_create_page():
-        csrf_token = session["csrf_token"] = random_string(32)
+        check_csrf_token()
         return render_template(
-            "create.html", possible_ttls=possible_ttls, csrf_token=csrf_token
+            "create.html", possible_ttls=possible_ttls
         )
 
     @bp.route("/create", methods=["POST"])
@@ -58,22 +52,18 @@ def create_routes(url_prefix: str) -> Blueprint:
         assert ttl in possible_ttls_keys, f"Invalid TTL: {ttl}"
 
         if not message:
-            csrf_token = session["csrf_token"] = random_string(32)
             return render_template(
                 "create.html",
                 possible_ttls=possible_ttls,
-                error="Message is required",
-                csrf_token=csrf_token,
+                error="Message is required"
             )
 
         if len(message) > max_message_length:
-            csrf_token = session["csrf_token"] = random_string(32)
             return render_template(
                 "create.html",
                 possible_ttls=possible_ttls,
                 error=ngettext("Message is too long (max %(max_message_length)s characters)", max_message_length),
-                message=message,
-                csrf_token=csrf_token,
+                message=message
             )
 
         key = random_string(32)
@@ -103,9 +93,8 @@ def create_routes(url_prefix: str) -> Blueprint:
     def open_secret(message_key: str):
         is_password_protected = secretStore.is_password_protected(message_key)
         if is_password_protected:
-            csrf_token = session["csrf_token"] = random_string(32)
             return render_template(
-                "check_password.html", message_key=message_key, csrf_token=csrf_token
+                "check_password.html", message_key=message_key
             )
         else:
             return render_template(
@@ -127,13 +116,11 @@ def create_routes(url_prefix: str) -> Blueprint:
         if success:
             return reveal_secret(message_key, password=password)
         elif remaining_attempts > 0:
-            csrf_token = session["csrf_token"] = random_string(32)
             return render_template(
                 "check_password.html",
                 message_key=message_key,
                 remaining_attempts=remaining_attempts,
-                error=gettext("Incorrect password. Please try again."),
-                csrf_token=csrf_token,
+                error=gettext("Incorrect password. Please try again.")
             )
         else:
             # burn the secret by fetching it

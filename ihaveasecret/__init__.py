@@ -2,6 +2,7 @@ from flask import Flask, request
 from werkzeug.middleware.proxy_fix import ProxyFix
 from .configuration import configurationStore
 from .routes import create_routes
+from .csrf_token import make_csrf_token
 import logging
 import os
 from pathlib import Path
@@ -68,6 +69,7 @@ def inject_jinja_variables():
         "url_prefix": url_prefix,
         "max_message_length": int(configurationStore.get("secrets.max_length", 2048)),
         "locale": get_locale(),
+        "make_csrf_token": make_csrf_token,
     }
 
 # ------------------------------------------------------------------------------
