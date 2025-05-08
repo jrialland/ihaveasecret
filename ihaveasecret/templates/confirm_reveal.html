@@ -2,5 +2,16 @@
 
 {% block content %}
     <h1 class="title"><i class="ri-mail-check-line"></i>&nbsp;{% trans %}Read a secret{% endtrans %}</h1>
+
+    {%if note %}
+    <p class="help">{% trans %}Note from the author of the message : {% endtrans %}</p>
+    <div class="notification is-primary">
+        <pre>
+            {{ note }}
+        </pre>
+    </div>
+    {% endif %}
+
+
     <a href="{{ reveal_url }}" class="button is-primary">{% trans %}Reveal secret{% endtrans %}</a>    
 {% endblock %}

@@ -2,8 +2,11 @@ from flask import Flask, request
 from werkzeug.middleware.proxy_fix import ProxyFix
 from .configuration import configurationStore
 from .routes import create_routes
+from .csrf_token import make_csrf_token
+from .util import to_data_uri
 import logging
 import os
+from datetime import datetime
 from pathlib import Path
 from flask_babel import Babel
 
@@ -30,9 +33,16 @@ app.config["LANGUAGES"] = {
     "es": "Español",
 }
 
+
+def get_locale():
+    return request.accept_languages.best_match(app.config["LANGUAGES"].keys()) or "en"
+
+
 app.config["BABEL_DEFAULT_LOCALE"] = "en"
-app.config["BABEL_TRANSLATION_DIRECTORIES"] = str(Path(__file__).parent.absolute() / "translations")
-babel = Babel(app, locale_selector=lambda: (request.accept_languages.best_match(app.config["LANGUAGES"].keys()) or "en"))
+app.config["BABEL_TRANSLATION_DIRECTORIES"] = str(
+    Path(__file__).parent.absolute() / "translations"
+)
+babel = Babel(app, locale_selector=get_locale)
 
 # ------------------------------------------------------------------------------
 # secret key configuration : required for session management
@@ -41,6 +51,7 @@ if not app_secret_key:
     logging.warning("app.secret_key is not set, generating a random key")
     app_secret_key = os.urandom(24).hex()
 app.secret_key = app_secret_key
+
 
 # ------------------------------------------------------------------------------
 # response headers configuration
@@ -52,6 +63,7 @@ def add_security_headers(response):
     response.headers["X-XSS-Protection"] = "1; mode=block"
     return response
 
+
 # ------------------------------------------------------------------------------
 # register variables in the Jinja context
 url_prefix = configurationStore.get("app.url_prefix", "")
@@ -59,12 +71,19 @@ if url_prefix:
     assert url_prefix.startswith("/"), "app.url_prefix must start with /"
     assert not url_prefix.endswith("/"), "app.url_prefix must not end with /"
 
+
 @app.context_processor
-def inject_url_prefix():
+def inject_jinja_variables():
     return {
         "url_prefix": url_prefix,
         "max_message_length": int(configurationStore.get("secrets.max_length", 2048)),
+        "locale": get_locale(),
+        "make_csrf_token": make_csrf_token,
+        "to_data_uri": to_data_uri,
+        "current_year": datetime.now().year,
+        "disable_email": configurationStore.get("app.disable_email", False),
     }
+
 
 # ------------------------------------------------------------------------------
 # register the routes

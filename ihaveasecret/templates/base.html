@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="{{locale}}">
 <head>
     <title>I Have A Secret</title>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='spy-line.png') }}">
@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="{{url_for('ihaveasecret.index')}}">
+            <a class="navbar-item" href="{{url_for('ihaveasecret.index')}}" title="Share secret messages securely">
                 <i class="ri-spy-line"></i>&nbsp;I Have A Secret
             </a>
         </div>
@@ -26,7 +26,7 @@
     <footer class="footer">
         <div class="content has-text-centered">
             <p>
-                <strong><a target="_blank" href="https://github.com/jrialland/ihaveasecret">Ihaveasecret</a></strong> © 2024 <a target="_blank" href="https://github.com/jrialland">jrialland</a>.
+                <strong><a target="_blank" href="https://github.com/jrialland/ihaveasecret">Ihaveasecret</a></strong> © 2024-{{current_year}} <a target="_blank" href="https://github.com/jrialland">jrialland</a>.
             </p>
         </div>
     </footer>

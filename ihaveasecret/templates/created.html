@@ -25,6 +25,18 @@
     <p>{% trans %}Therefore, the generated link can only be opened once.{% endtrans %}</p>
 </div>
 
+{% if email_status == 'sent' %}
+<div class="notification is-info">
+    <p><i class="ri-mail-send-line"></i>&nbsp;{% trans %}A notification email has been sent to the provided address{% endtrans %}</p>
+</div>
+{% endif %}
+
+{% if email_status == 'error' %}
+<div class="notification is-danger">
+    <p><i class="ri-error-warning-line"></i>&nbsp;{% trans %}An error occurred while sending the email.{% endtrans %}</p>
+</div>
+{% endif %}
+
 <a href="{{ url_for('ihaveasecret.create') }}" class="button is-primary">{% trans %}Create another secret{% endtrans
     %}</a>
 {% endblock %}

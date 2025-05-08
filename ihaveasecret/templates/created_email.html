@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <img src="{{to_data_uri('spy-line.png')}}" alt="I Have A Secret" style="width: 100px; height: auto;">
+        <h1 class="title"><i class="ri-mail-check-line"></i>&nbsp;Read a secret</h1>
+        <p>A confidential information has shared with you</p>
+        <p>To read the message, please click on the link below:</p>
+        <p><a href="{{ message_url }}">{{ message_url }}</a></p>
+
+        {% if note %}
+        <p class="help">Note from the author of the message:'</p>
+        <div class="notification is-primary">
+            <pre>
+                {{ note }}
+            </pre>
+        </div>
+        {% endif %}
+</html>
