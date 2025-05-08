@@ -3,6 +3,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from .configuration import configurationStore
 from .routes import create_routes
 from .csrf_token import make_csrf_token
+from .util import to_data_uri
 import logging
 import os
 from datetime import datetime
@@ -78,7 +79,9 @@ def inject_jinja_variables():
         "max_message_length": int(configurationStore.get("secrets.max_length", 2048)),
         "locale": get_locale(),
         "make_csrf_token": make_csrf_token,
+        "to_data_uri": to_data_uri,
         "current_year": datetime.now().year,
+        "disable_email": configurationStore.get("app.disable_email", False),
     }
 
 

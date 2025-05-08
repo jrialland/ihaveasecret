@@ -7,10 +7,12 @@ from flask import (
     redirect,
     url_for,
 )
+import logging
 from datetime import datetime, timedelta
 from .configuration import configurationStore
 from .secretstore import secretStore
-from .util import random_string, build_url
+from .send_email import send_message_created_email
+from .util import random_string, build_url, is_valid_email
 from pathlib import Path
 from flask_babel import gettext, ngettext
 from .csrf_token import check_csrf_token
@@ -47,6 +49,7 @@ def create_routes(url_prefix: str) -> Blueprint:
         check_csrf_token()
         note = request.form.get("note", "")
         message = request.form.get("message")
+        email = request.form.get("email")
         ttl = request.form["ttl"]
         password = request.form.get("password")
         assert ttl in possible_ttls_keys, f"Invalid TTL: {ttl}"
@@ -67,13 +70,38 @@ def create_routes(url_prefix: str) -> Blueprint:
                 message=message,
             )
 
+        # check email
+        if email and email.strip() != "":
+            if not is_valid_email(email):
+                return render_template(
+                    "create.html",
+                    possible_ttls=possible_ttls,
+                    error=gettext("Invalid email address"),
+                )
+
         key = random_string(32)
+
+        # save the secret
         secretStore.save(
             key, note, message, datetime.now() + timedeltas[ttl], password=password
         )
+
+        message_url = build_url(request.url_root, url_prefix, "secret", key)
+
+        # send email if configured
+        email_status = "not_sent"
+        if email and not configurationStore.get("app.disable_email", False):
+            try:
+                send_message_created_email(email, message_url=message_url, note=note)
+                email_status = "sent"
+            except Exception as e:
+                email_status = "error"
+                logging.exception("Failed to send email")
+
         return render_template(
             "created.html",
-            message_url=build_url(request.url_root, url_prefix, "secret", key),
+            message_url=message_url,
+            email_status=email_status,
         )
 
     def reveal_secret(message_key: str, password: str = None):

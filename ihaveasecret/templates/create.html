@@ -3,7 +3,6 @@
 {% block content %}
 
 <h1 class="title"><i class="ri-spy-line"></i>&nbsp;{% trans %}Create a secret{% endtrans %}</h1>
-
 {% if error %}
 <div class="notification is-danger">
     <p><i class="ri-error-warning-line"></i>{{ error }}</p>
@@ -13,7 +12,7 @@
 <form method="post">
     <input type="hidden" name="csrf_token" value="{{ make_csrf_token() }}">
     <div class="" field">
-        <label class="label">{% trans %}A public note or explanation for the recipient{% endtrans %}</label>
+        <label class="label">{% trans %}Leave a note or explanation for the recipient{% endtrans %}</label>
         <p class="help">{% trans %}This content will be displayed when the recipient opens the link{% endtrans %}</p>
         <div class="control">
             <textarea class="textarea" name="note" x-maxlength="{{ max_message_length }}"
@@ -22,7 +21,7 @@
     </div>
     <div class="field">
         <label class="label">Secret Message</label>
-        <p class="help">{% trans %}The sensible information that you want to share{% endtrans %}</p>
+        <p class="help">{% trans %}The confidential information that you want to share{% endtrans %}</p>
         <div class="control">
             <textarea class="textarea" name="message" x-maxlength="{{ max_message_length }}"
                 placeholder="{{ gettext('Your secret message') }}">{% if message %}{{ message }}{% endif %}</textarea>
@@ -48,6 +47,18 @@
                 autocomplete="new-password">
         </div>
     </div>
+
+    {% if not disable_email %}
+    <div class="field">
+        <label class="label"><i>({{ gettext('optional') }})</i> {{ gettext('Email') }}</label>
+        <p class="help">Notify the recipient by email</p>
+        <div class="control">
+            <input class="input" type="email" name="email" placeholder="{{ gettext('Recipient email') }}"
+                autocomplete="email">
+        </div>
+    </div>
+    {% endif %}
+
     <div class="field">
         <div class="control">
             <button class="button is-primary">{% trans %}Create{% endtrans %}</button>
