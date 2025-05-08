@@ -5,6 +5,7 @@ from .routes import create_routes
 from .csrf_token import make_csrf_token
 import logging
 import os
+from datetime import datetime
 from pathlib import Path
 from flask_babel import Babel
 
@@ -77,6 +78,7 @@ def inject_jinja_variables():
         "max_message_length": int(configurationStore.get("secrets.max_length", 2048)),
         "locale": get_locale(),
         "make_csrf_token": make_csrf_token,
+        "current_year": datetime.now().year,
     }
 
 
