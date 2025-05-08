@@ -8,6 +8,15 @@
         <p><i class="ri-information-line"></i>&nbsp;{% trans %}This message is displayed only once and will not be available if this page is reloaded.{% endtrans %}</p>
     </div>
 
+    {%if note %}
+    <p class="help">{% trans %}Note from the author of the message : {% endtrans %}</p>
+    <div class="notification is-primary">
+        <pre>
+            {{ note }}
+        </pre>
+    </div>
+    {% endif %}
+
     <div class="notification is-primary">
         <pre>
             {{ secret_text }}

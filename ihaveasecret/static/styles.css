@@ -1,1 +1,5 @@
-/*empty by default */
+p.help {
+    font-size: 0.8em;
+    color: #666;
+    font-style: italic;
+}

@@ -31,11 +31,15 @@ app.config["LANGUAGES"] = {
     "es": "Español",
 }
 
+
 def get_locale():
     return request.accept_languages.best_match(app.config["LANGUAGES"].keys()) or "en"
 
+
 app.config["BABEL_DEFAULT_LOCALE"] = "en"
-app.config["BABEL_TRANSLATION_DIRECTORIES"] = str(Path(__file__).parent.absolute() / "translations")
+app.config["BABEL_TRANSLATION_DIRECTORIES"] = str(
+    Path(__file__).parent.absolute() / "translations"
+)
 babel = Babel(app, locale_selector=get_locale)
 
 # ------------------------------------------------------------------------------
@@ -45,6 +49,7 @@ if not app_secret_key:
     logging.warning("app.secret_key is not set, generating a random key")
     app_secret_key = os.urandom(24).hex()
 app.secret_key = app_secret_key
+
 
 # ------------------------------------------------------------------------------
 # response headers configuration
@@ -56,12 +61,14 @@ def add_security_headers(response):
     response.headers["X-XSS-Protection"] = "1; mode=block"
     return response
 
+
 # ------------------------------------------------------------------------------
 # register variables in the Jinja context
 url_prefix = configurationStore.get("app.url_prefix", "")
 if url_prefix:
     assert url_prefix.startswith("/"), "app.url_prefix must start with /"
     assert not url_prefix.endswith("/"), "app.url_prefix must not end with /"
+
 
 @app.context_processor
 def inject_jinja_variables():
@@ -71,6 +78,7 @@ def inject_jinja_variables():
         "locale": get_locale(),
         "make_csrf_token": make_csrf_token,
     }
+
 
 # ------------------------------------------------------------------------------
 # register the routes

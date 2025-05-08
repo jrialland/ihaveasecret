@@ -58,6 +58,7 @@ class CipheredMessage:
 
 @dataclass
 class Secret:
+    note: str
     message: CipheredMessage
     expires: datetime
     password_protected: bool = False
@@ -66,6 +67,7 @@ class Secret:
 
     def to_dict(self):
         return {
+            "note": self.note,
             "message": self.message.to_dict(),
             "expires": self.expires.isoformat(),
             "password_protected": self.password_protected,
@@ -76,6 +78,7 @@ class Secret:
     @staticmethod
     def from_dict(data):
         return Secret(
+            note=data["note"],
             message=CipheredMessage.from_dict(data["message"]),
             expires=datetime.fromisoformat(data["expires"]),
             password_protected=data["password_protected"],
@@ -92,13 +95,19 @@ class SecretStore(ABC):
         self.max_attempts = max_attempts
 
     def save(
-        self, key: str, message: str, expires: datetime, password: str | None = None
+        self,
+        key: str,
+        note: str,
+        message: str,
+        expires: datetime,
+        password: str | None = None,
     ) -> None:
         password_protected = password is not None and len(password) > 0
         if not password_protected:
             # use the default password if one is not provided
             password = self.default_password
         secret = Secret(
+            note=note,
             message=CipheredMessage.create_from_message(password, message),
             expires=expires,
             password_protected=password_protected,
@@ -106,20 +115,13 @@ class SecretStore(ABC):
         )
         self._store(key, secret)
 
-    def load(
-        self, key: str, password: str = None, remove: bool = True
-    ) -> Secret | None:
+    def load(self, key: str, remove: bool = True) -> Secret | None:
         secret = self._load(key)
         if secret:
             if remove:
                 self._remove(key)
             if secret.expires < datetime.now():
                 return None
-            if secret.password_protected:
-                if not password:
-                    return None
-                if sha256(password.encode()).hexdigest() != secret.password_hash:
-                    return None
             return secret
         return None
 
@@ -134,17 +136,17 @@ class SecretStore(ABC):
         secret = self._load(key)
         return secret and secret.password_protected
 
-    def check_password(self, key: str, password: str) -> Tuple[bool, int]:
+    def check_password(self, key: str, password: str) -> Tuple[str, bool, int]:
         """Check if the password is correct for a password-protected secret.
-        return a tuple of (is_correct, remaining_attempts)
+        return a tuple of (message note, is_correct, remaining_attempts)
         """
         secret = self._load(key)
 
         if not secret or not secret.password_protected:
-            return False, 0
+            return None, False, 0
 
         if sha256(password.encode()).hexdigest() == secret.password_hash:
-            return True, 0
+            return secret.note, True, 0
         else:
             secret.password_attempts += 1
             remaining_attempts = self.max_attempts - secret.password_attempts
@@ -152,7 +154,7 @@ class SecretStore(ABC):
                 self._remove(key)
             # update the secret in the store
             self._store(key, secret)
-            return False, remaining_attempts
+            return secret.note, False, remaining_attempts
 
     @abstractmethod
     def _store(self, key: str, secret: Secret) -> None:
@@ -195,7 +197,7 @@ class InMemorySecretStore(SecretStore):
         return self.secrets.get(key)
 
     def _remove(self, key: str) -> None:
-        del self.secrets[key]
+        self.secrets.pop(key, None)
 
     def __del__(self):
         t = self.cleanup_thread

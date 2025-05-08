@@ -12,8 +12,17 @@
 
 <form method="post">
     <input type="hidden" name="csrf_token" value="{{ make_csrf_token() }}">
+    <div class="" field">
+        <label class="label">{% trans %}A public note or explanation for the recipient{% endtrans %}</label>
+        <p class="help">{% trans %}This content will be displayed when the recipient opens the link{% endtrans %}</p>
+        <div class="control">
+            <textarea class="textarea" name="note" x-maxlength="{{ max_message_length }}"
+                placeholder="{{ gettext('Your note') }}">{% if note %}{{ note }}{% endif %}</textarea>
+        </div>
+    </div>
     <div class="field">
-        <label class="label">Message</label>
+        <label class="label">Secret Message</label>
+        <p class="help">{% trans %}The sensible information that you want to share{% endtrans %}</p>
         <div class="control">
             <textarea class="textarea" name="message" x-maxlength="{{ max_message_length }}"
                 placeholder="{{ gettext('Your secret message') }}">{% if message %}{{ message }}{% endif %}</textarea>
@@ -21,6 +30,7 @@
     </div>
     <div class="field">
         <label class="label">{% trans %}Time to live{% endtrans %}</label>
+        <p class="help">{% trans %}If the message has not been before the end of this period it will be deleted{% endtrans %}</p>
         <div class="select">
             <select name="ttl" title="{% trans %}Time to live{% endtrans %}">
                 {% for (k, v, _) in possible_ttls %}
@@ -32,8 +42,10 @@
     <div class="field">
         <label class="label"><i>({{ gettext('optional') }})</i> {{ gettext('Password') }}</label>
         <div class="control">
-            <input class="input" type="hidden" name="username" autocomplete="username"> {# as recommanded by https://www.chromium.org/developers/design-documents/create-amazing-password-forms/ #}
-            <input class="input" type="password" name="password" placeholder="{{ gettext('Your secret password') }}" autocomplete="new-password">
+            <input class="input" type="hidden" name="username" autocomplete="username"> {# as recommanded by
+            https://www.chromium.org/developers/design-documents/create-amazing-password-forms/ #}
+            <input class="input" type="password" name="password" placeholder="{{ gettext('Your secret password') }}"
+                autocomplete="new-password">
         </div>
     </div>
     <div class="field">

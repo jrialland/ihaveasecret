@@ -34,7 +34,7 @@ class ConfigurationStore:
         if value:
             logging.info(f"Resolved {key} from environment variable {envvar}")
         return value
-    
+
     def _get_from_file(self, key):
         value = self._config.get(key)
         if value:

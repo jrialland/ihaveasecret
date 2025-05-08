@@ -16,13 +16,14 @@ from flask_babel import gettext, ngettext
 from .csrf_token import check_csrf_token
 
 possible_ttls = [
-    ("1 hour", gettext('1 hour'), timedelta(hours=1)),
-    ("1 day", gettext('1 day'), timedelta(days=1)),
-    ("1 week", gettext('1 week'), timedelta(weeks=1)),
+    ("1 hour", gettext("1 hour"), timedelta(hours=1)),
+    ("1 day", gettext("1 day"), timedelta(days=1)),
+    ("1 week", gettext("1 week"), timedelta(weeks=1)),
 ]
 
 possible_ttls_keys = [ttl[0] for ttl in possible_ttls]
 timedeltas = {ttl[0]: ttl[2] for ttl in possible_ttls}
+
 
 def create_routes(url_prefix: str) -> Blueprint:
 
@@ -39,13 +40,12 @@ def create_routes(url_prefix: str) -> Blueprint:
     @bp.route("/create", methods=["GET"])
     def display_create_page():
         check_csrf_token()
-        return render_template(
-            "create.html", possible_ttls=possible_ttls
-        )
+        return render_template("create.html", possible_ttls=possible_ttls)
 
     @bp.route("/create", methods=["POST"])
     def create():
         check_csrf_token()
+        note = request.form.get("note", "")
         message = request.form.get("message")
         ttl = request.form["ttl"]
         password = request.form.get("password")
@@ -53,22 +53,23 @@ def create_routes(url_prefix: str) -> Blueprint:
 
         if not message:
             return render_template(
-                "create.html",
-                possible_ttls=possible_ttls,
-                error="Message is required"
+                "create.html", possible_ttls=possible_ttls, error="Message is required"
             )
 
         if len(message) > max_message_length:
             return render_template(
                 "create.html",
                 possible_ttls=possible_ttls,
-                error=ngettext("Message is too long (max %(max_message_length)s characters)", max_message_length),
-                message=message
+                error=ngettext(
+                    "Message is too long (max %(max_message_length)s characters)",
+                    max_message_length,
+                ),
+                message=message,
             )
 
         key = random_string(32)
         secretStore.save(
-            key, message, datetime.now() + timedeltas[ttl], password=password
+            key, note, message, datetime.now() + timedeltas[ttl], password=password
         )
         return render_template(
             "created.html",
@@ -76,29 +77,69 @@ def create_routes(url_prefix: str) -> Blueprint:
         )
 
     def reveal_secret(message_key: str, password: str = None):
-        secret_text = secretStore.get_message(message_key, password=password)
+        secret = secretStore.load(message_key, remove=True)
+        if secret is None:
+            return (
+                render_template(
+                    "error.html",
+                    level="danger",
+                    message=gettext(
+                        "Sorry, that secret has already been seen or does not exist."
+                    ),
+                ),
+                404,
+            )
+        secret_text = secret.message.decrypt(password or secretStore.default_password)
         if secret_text is not None:
-            return render_template("reveal.html", secret_text=secret_text)
+            return render_template(
+                "reveal.html", note=secret.note, secret_text=secret_text
+            )
         else:
             return (
                 render_template(
                     "error.html",
                     level="danger",
-                    message=gettext("Sorry, that secret has already been seen or does not exist."),
+                    message=gettext(
+                        "Sorry, that secret has already been seen or does not exist."
+                    ),
                 ),
                 404,
             )
 
     @bp.route("/secret/<string:message_key>", methods=["GET"])
     def open_secret(message_key: str):
-        is_password_protected = secretStore.is_password_protected(message_key)
-        if is_password_protected:
+        secret = secretStore.load(message_key, remove=False)
+        if secret is None:
+            return (
+                render_template(
+                    "error.html",
+                    level="danger",
+                    message=gettext(
+                        "Sorry, that secret has already been seen or does not exist."
+                    ),
+                ),
+                404,
+            )
+        if secret.expires < datetime.now():
+            return (
+                render_template(
+                    "error.html",
+                    level="danger",
+                    message=gettext("Sorry, that secret has expired."),
+                ),
+                404,
+            )
+        if secret.password_protected:
             return render_template(
-                "check_password.html", message_key=message_key
+                "check_password.html",
+                message_key=message_key,
+                note=secret.note,
+                remaining_attempts=secret.password_attempts,
             )
         else:
             return render_template(
                 "confirm_reveal.html",
+                note=secret.note,
                 reveal_url=build_url(
                     request.url_root, url_prefix, "reveal", message_key
                 ),
@@ -108,19 +149,27 @@ def create_routes(url_prefix: str) -> Blueprint:
     def reveal(message_key: str):
         return reveal_secret(message_key)
 
+    @bp.route("/check_password/<string:message_key>", methods=["GET"])
+    def check_password_get(message_key: str):
+        # redirect to the /secret/<message_key> route
+        return redirect(url_for("ihaveasecret.open_secret", message_key=message_key))
+
     @bp.route("/check_password/<string:message_key>", methods=["POST"])
     def check_password(message_key: str):
         check_csrf_token()
         password = request.form["password"]
-        success, remaining_attempts = secretStore.check_password(message_key, password)
+        note, success, remaining_attempts = secretStore.check_password(
+            message_key, password
+        )
         if success:
             return reveal_secret(message_key, password=password)
         elif remaining_attempts > 0:
             return render_template(
                 "check_password.html",
+                note=note,
                 message_key=message_key,
                 remaining_attempts=remaining_attempts,
-                error=gettext("Incorrect password. Please try again.")
+                error=gettext("Incorrect password. Please try again."),
             )
         else:
             # burn the secret by fetching it
@@ -129,7 +178,10 @@ def create_routes(url_prefix: str) -> Blueprint:
                 render_template(
                     "error.html",
                     level="danger",
-                    message=gettext("The secret has been deleted because of too many incorrect password attempts."),
+                    note=note,
+                    message=gettext(
+                        "The secret has been deleted because of too many incorrect password attempts."
+                    ),
                 ),
                 404,
             )
