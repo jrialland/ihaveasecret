@@ -35,6 +35,8 @@ app.config["LANGUAGES"] = {
 
 
 def get_locale():
+    if request.args.get("lang"):
+        return request.args.get("lang")
     return request.accept_languages.best_match(app.config["LANGUAGES"].keys()) or "en"
 
 
