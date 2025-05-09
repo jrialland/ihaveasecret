@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-05-09 02:05+0200\n"
+"POT-Creation-Date: 2025-05-09 11:01+0200\n"
 "PO-Revision-Date: 2025-05-09 01:45+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -76,7 +76,7 @@ msgstr "Il vous reste une tentative."
 msgid "You have %(n)d remaining attempts left."
 msgstr "Il vous reste %(n)d tentatives."
 
-#: templates/check_password.html:44 templates/create.html:46
+#: templates/check_password.html:44 templates/create.html:50
 msgid "Your secret password"
 msgstr "Votre mot de passe secret"
 
@@ -88,39 +88,43 @@ msgstr "Lire un secret"
 msgid "Reveal secret"
 msgstr "Révéler le secret"
 
-#: templates/create.html:5
+#: templates/create.html:6
 msgid "Create a secret"
 msgstr "Créer un secret"
 
-#: templates/create.html:15
+#: templates/create.html:7
+msgid "Generate a message that can be read using a one-time link"
+msgstr "Créer un message qui peut être lu à l'aide d'un lien à usage unique"
+
+#: templates/create.html:19
 msgid "Leave a note or explanation for the recipient"
 msgstr "Laissez une note ou une explication pour le destinataire"
 
-#: templates/create.html:16
+#: templates/create.html:20
 msgid "This content will be displayed when the recipient opens the link"
 msgstr "Ce contenu sera affiché lorsque le destinataire ouvrira le lien"
 
-#: templates/create.html:19
+#: templates/create.html:23
 msgid "Your note"
 msgstr "Votre note"
 
-#: templates/create.html:23
+#: templates/create.html:27
 msgid "Secret Message"
 msgstr "Votre message secret"
 
-#: templates/create.html:24
+#: templates/create.html:28
 msgid "The confidential information that you want to share"
 msgstr "Les informations confidentielles que vous souhaitez partager"
 
-#: templates/create.html:27
+#: templates/create.html:31
 msgid "Your secret message"
 msgstr "Votre message secret"
 
-#: templates/create.html:31 templates/create.html:34
+#: templates/create.html:35 templates/create.html:38
 msgid "Time to live"
 msgstr "Durée de vie"
 
-#: templates/create.html:32
+#: templates/create.html:36
 msgid ""
 "If the message is not seen before the end of this period it will be "
 "deleted"
@@ -128,23 +132,23 @@ msgstr ""
 "Si le message n'est pas consulté avant la fin de cette période, il sera "
 "supprimé."
 
-#: templates/create.html:42 templates/create.html:53
+#: templates/create.html:46 templates/create.html:57
 msgid "Optional"
 msgstr "facultatif"
 
-#: templates/create.html:42
+#: templates/create.html:46
 msgid "Password"
 msgstr "Mot de passe"
 
-#: templates/create.html:53
+#: templates/create.html:57
 msgid "Email"
 msgstr "E-mail"
 
-#: templates/create.html:56
+#: templates/create.html:60
 msgid "Recipient email"
 msgstr "E-mail du destinataire"
 
-#: templates/create.html:64
+#: templates/create.html:68
 msgid "Create"
 msgstr "Créer"
 
