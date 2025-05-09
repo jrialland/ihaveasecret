@@ -9,6 +9,7 @@ RUN pip install --root-user-action=ignore poetry
 ADD poetry.lock pyproject.toml /app/
 
 WORKDIR /app
+RUN poetry lock
 RUN poetry install --no-root --only main
 
 # ------------------------------------------------------------------------------
