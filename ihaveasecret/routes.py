@@ -39,8 +39,26 @@ def create_routes(url_prefix: str) -> Blueprint:
     def send_static(path: str):
         return send_from_directory(staticdir, path)
 
+    @bp.route("/robots.txt")
+    def send_robots_txt():
+        return send_from_directory(staticdir, "robots.txt")
+    
+    @bp.route("/favicon.ico")
+    def send_favicon():
+        return send_from_directory(staticdir, "favicon.ico")
+    
+    @bp.route("ads.txt")
+    def send_ads_txt():
+        return send_from_directory(staticdir, "ads.txt")
+
     @bp.route("/create", methods=["GET"])
     def display_create_page():
+        check_csrf_token()
+        return render_template("create.html", possible_ttls=possible_ttls)
+
+    # / is the same as /create
+    @bp.route("/", methods=["GET"])
+    def display_create_page_redirect():
         check_csrf_token()
         return render_template("create.html", possible_ttls=possible_ttls)
 
@@ -54,9 +72,18 @@ def create_routes(url_prefix: str) -> Blueprint:
         password = request.form.get("password")
         assert ttl in possible_ttls_keys, f"Invalid TTL: {ttl}"
 
-        if not message:
+        if len(note) > max_message_length:
             return render_template(
-                "create.html", possible_ttls=possible_ttls, error="Message is required"
+                "create.html",
+                possible_ttls=possible_ttls,
+                error=ngettext(
+                    "Note is too long (max %(max_message_length)s characters)",
+                    max_message_length,
+                ),
+                note=note,
+                message=message,
+                email=email,
+                ttl=ttl,
             )
 
         if len(message) > max_message_length:
@@ -67,7 +94,32 @@ def create_routes(url_prefix: str) -> Blueprint:
                     "Message is too long (max %(max_message_length)s characters)",
                     max_message_length,
                 ),
+                note=note,
                 message=message,
+                email=email,
+                ttl=ttl,
+            )
+        if not message:
+            return render_template(
+                "create.html", possible_ttls=possible_ttls, error="Message is required",
+                note=note,
+                message=message,
+                email=email,
+                ttl=ttl,
+            )
+
+        if len(message) > max_message_length:
+            return render_template(
+                "create.html",
+                possible_ttls=possible_ttls,
+                error=ngettext(
+                    "Message is too long (max %(max_message_length)s characters)",
+                    max_message_length,
+                ),
+                note=note,
+                message=message,
+                email=email,
+                ttl=ttl,
             )
 
         # check email
@@ -77,6 +129,10 @@ def create_routes(url_prefix: str) -> Blueprint:
                     "create.html",
                     possible_ttls=possible_ttls,
                     error=gettext("Invalid email address"),
+                    note=note,
+                    message=message,
+                    email=email,
+                    ttl=ttl,
                 )
 
         key = random_string(32)
@@ -90,9 +146,9 @@ def create_routes(url_prefix: str) -> Blueprint:
 
         # send email if configured
         email_status = "not_sent"
-        if email and not configurationStore.get("app.disable_email", False):
+        if email and not bool(configurationStore.get("app.disable_email", False)):
             try:
-                send_message_created_email(email, message_url=message_url, note=note)
+                send_message_created_email(email, message_url=message_url, note=note, ttl=ttl)
                 email_status = "sent"
             except Exception as e:
                 email_status = "error"

@@ -14,7 +14,7 @@ template_env = Environment(
 )
 
 
-def send_message_created_email(recipient: str, message_url: str, note: str = None):
+def send_message_created_email(recipient: str, message_url: str, note: str = None, ttl: str = None):
     """
     Send an email to the recipient with the message created.
     """
@@ -26,6 +26,7 @@ def send_message_created_email(recipient: str, message_url: str, note: str = Non
         recipient=recipient,
         message_url=message_url,
         note=note,
+        ttl=ttl,
     )
 
     # compute alternative text using bs4
@@ -35,7 +36,7 @@ def send_message_created_email(recipient: str, message_url: str, note: str = Non
     # create a multipart email
     msg = MIMEMultipart("alternative")
     msg["Subject"] = "Secret Created"
-    msg["From"] = configurationStore.get("smtp.sender_email", "noreply@ihaveasecret.io")
+    msg["From"] = configurationStore.get("smtp.sender_email", "noreply@ihaveasecret.cloud")
     msg["To"] = recipient
     msg.attach(MIMEText(msg_text, "plain"))
     msg.attach(MIMEText(msg_html, "html"))

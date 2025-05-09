@@ -8,6 +8,39 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="{{ url_for('static', filename='zxcvbn.js') }}" defer></script>
     <script src="{{ url_for('static', filename='main.js') }}" defer></script>
+    <meta name="google-adsense-account" content="ca-pub-7541896314230798">
+    <meta name="description" content="Easily share confidential messages with one-time secure links. Secrets are deleted after being viewed. Simple, private, and fast.">
+    <meta name="keywords" content="secret, share, message, secure, one-time, link, private, fast, ihaveasecret">
+    <meta name="author" content="jrialland">
+    <meta property="og:title" content="Secure One-Time Secret Sharing">
+    <meta property="og:description" content="Share secrets privately using encrypted, self-destructing messages.">
+    <meta property="og:image" content="{{ url_for('static', filename='spy-line.png') }}">
+    <meta property="og:url" content="{{ url_for('ihaveasecret.index') }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Secure One-Time Secret Sharing">
+    <meta name="twitter:description" content="Send private secrets that disappear after being read. Fast, free and secure.">
+    <meta name="twitter:image" content="{{ url_for('static', filename='spy-line.png') }}">
+    <meta name="twitter:site" content="@jrialland">
+    <link rel="icon" href="{{ url_for('static', filename='spy-line.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='spy-line.png') }}">
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "One-Time Secret",
+          "url": "{{ url_for('ihaveasecret.index') }}",
+          "description": "Share confidential messages via self-destructing one-time links.",
+          "applicationCategory": "Utility",
+          "operatingSystem": "All",
+          "softwareVersion": "1.0",
+          "author": {
+              "@type": "Person",
+              "name": "jrialland",
+              "url": "https://github.com/jrialland"
+          }
+        }
+    </script>
 </head>
 <body>
     <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
@@ -15,6 +48,15 @@
             <a class="navbar-item" href="{{url_for('ihaveasecret.index')}}" title="Share secret messages securely">
                 <i class="ri-spy-line"></i>&nbsp;I Have A Secret
             </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item" title="Buy me a coffee" id="buy-me-a-coffee">
+                    <a href="https://www.buymeacoffee.com/jrialland" target="_blank" class="button is-primary" title="Buy me a coffee">
+                        <i class="ri-drinks-line"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </nav>
     <section class="section">
