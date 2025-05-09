@@ -35,18 +35,11 @@ The following table provides guidance on configuring the app:
 |redis.url|/run/secrets/redis.url|REDIS_URL|redis url|none, in-memory storage is used if missing|
 |passwords.max_attempts|/run/secrets/password.max_attempts|PASSWORDS_MAX_ATTEMPTS|how many tries are allowed|3|
 |app.disable_email|/run/secrets/app.disable_email|APP_DISABLE_EMAIL|disable email notifications|false|
-|smtp.sender_email|/run/secrets/smtp.sender_email|SMTP_SENDER_EMAIL|sender address|noreply@ihaveasecret.io|
+|smtp.sender_email|/run/secrets/smtp.sender_email|SMTP_SENDER_EMAIL|sender address|noreply@ihaveasecret.cloud|
 |smtp.server|/run/secrets/smtp.server|SMTP_SERVER|smtp host|localhost|
 |smtp_port|/run/secrets/smtp.port|SMTP_PORT|smtp port|587|
 |smtp_user|/run/secrets/smtp.user|SMTP_USER|smtp user|(none)|
-|smtp_password|/run/secrets/smtp.password|smtp password|(none)|
-
-TODOs :
--------
- * <strike>Translations</strike>
- * <strike>Document configuration keys</strike>
- * <strike>javascript : hint on password strength (https://github.com/dropbox/zxcvbn ?)</strike>
- * <strike>javascript : message length</strike>
+|smtp_password|/run/secrets/smtp.password|SMTP_PASSWORD|smtp password|(none)|
 
 Development :
 -----------
