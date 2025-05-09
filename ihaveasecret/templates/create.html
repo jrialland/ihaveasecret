@@ -9,7 +9,7 @@
 </div>
 {% endif %}
 
-<form method="post">
+<form method="post" action="{{ url_for('ihaveasecret.create') }}">
     <input type="hidden" name="csrf_token" value="{{ make_csrf_token() }}">
     <div class="" field">
         <label class="label">{% trans %}Leave a note or explanation for the recipient{% endtrans %}</label>
@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="field">
-        <label class="label">Secret Message</label>
+        <label class="label">{% trans %}Secret Message{% endtrans %}</label>
         <p class="help">{% trans %}The confidential information that you want to share{% endtrans %}</p>
         <div class="control">
             <textarea class="textarea" name="message" x-maxlength="{{ max_message_length }}"
@@ -29,17 +29,17 @@
     </div>
     <div class="field">
         <label class="label">{% trans %}Time to live{% endtrans %}</label>
-        <p class="help">{% trans %}If the message has not been before the end of this period it will be deleted{% endtrans %}</p>
+        <p class="help">{% trans %}If the message is not seen before the end of this period it will be deleted{% endtrans %}</p>
         <div class="select">
             <select name="ttl" title="{% trans %}Time to live{% endtrans %}">
                 {% for (k, v, _) in possible_ttls %}
-                <option value="{{ k }}">{{ v }}</option>
+                <option value="{{ k }}" {% if ttl%}{%if ttl == k %}selected{% endif %}{% endif %}>{{ v }}</option>
                 {% endfor %}
             </select>
         </div>
     </div>
     <div class="field">
-        <label class="label"><i>({{ gettext('optional') }})</i> {{ gettext('Password') }}</label>
+        <label class="label"><i>({% trans %}Optional{% endtrans %})</i> {{ gettext('Password') }}</label>
         <div class="control">
             <input class="input" type="hidden" name="username" autocomplete="username"> {# as recommanded by
             https://www.chromium.org/developers/design-documents/create-amazing-password-forms/ #}
@@ -50,7 +50,7 @@
 
     {% if not disable_email %}
     <div class="field">
-        <label class="label"><i>({{ gettext('optional') }})</i> {{ gettext('Email') }}</label>
+        <label class="label"><i>({% trans %}Optional{% endtrans %})</i> {{ gettext('Email') }}</label>
         <p class="help">Notify the recipient by email</p>
         <div class="control">
             <input class="input" type="email" name="email" placeholder="{{ gettext('Recipient email') }}"
