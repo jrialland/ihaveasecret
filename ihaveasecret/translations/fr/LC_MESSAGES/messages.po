@@ -1,9 +1,14 @@
+# French translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-23 18:54+0100\n"
-"PO-Revision-Date: 2024-03-23 15:19+0100\n"
+"POT-Creation-Date: 2025-05-09 02:05+0200\n"
+"PO-Revision-Date: 2025-05-09 01:45+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -13,27 +18,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: routes.py:18
+#: routes.py:21
 msgid "1 hour"
 msgstr "1 heure"
 
-#: routes.py:19
+#: routes.py:22
 msgid "1 day"
 msgstr "1 jour"
 
-#: routes.py:20
+#: routes.py:23
 msgid "1 week"
 msgstr "1 semaine"
 
-#: routes.py:97
-msgid "Sorry, that secret has already been seen or does not exist."
-msgstr "Désolé, ce secret a déjà été consulté ou n'existe pas."
+#: routes.py:131
+msgid "Invalid email address"
+msgstr "Adresse e-mail invalide"
 
-#: routes.py:135
+#: routes.py:170 routes.py:186 routes.py:201
+msgid "Sorry, that secret has already been seen or does not exist."
+msgstr "Désolé, ce secret a déjà été vu ou n'existe pas."
+
+#: routes.py:212
+msgid "Sorry, that secret has expired."
+msgstr "Désolé, ce secret a expiré."
+
+#: routes.py:256
 msgid "Incorrect password. Please try again."
 msgstr "Mot de passe incorrect. Veuillez réessayer."
 
-#: routes.py:145
+#: routes.py:266
 msgid ""
 "The secret has been deleted because of too many incorrect password "
 "attempts."
@@ -41,24 +54,29 @@ msgstr ""
 "Le secret a été supprimé en raison de trop nombreuses tentatives de mot "
 "de passe incorrectes."
 
-#: templates/check_password.html:8
+#: templates/check_password.html:8 templates/confirm_reveal.html:7
+#: templates/reveal.html:12
+msgid "Note from the author of the message : "
+msgstr "Note de l'auteur du message : "
+
+#: templates/check_password.html:17
 msgid ""
 "The secret is safeguarded by a password. Please enter the password to "
 "unveil the secret."
 msgstr ""
-"Le secret est protégé par un mot de passe. Veuillez saisir le mot de "
+"Le secret est protégé par un mot de passe. Veuillez entrer le mot de "
 "passe pour dévoiler le secret."
 
-#: templates/check_password.html:22
+#: templates/check_password.html:31
 msgid "You have one remaining attempt left."
 msgstr "Il vous reste une tentative."
 
-#: templates/check_password.html:24
+#: templates/check_password.html:33
 #, python-format
 msgid "You have %(n)d remaining attempts left."
 msgstr "Il vous reste %(n)d tentatives."
 
-#: templates/check_password.html:35 templates/create.html:35
+#: templates/check_password.html:44 templates/create.html:46
 msgid "Your secret password"
 msgstr "Votre mot de passe secret"
 
@@ -66,32 +84,67 @@ msgstr "Votre mot de passe secret"
 msgid "Read a secret"
 msgstr "Lire un secret"
 
-#: templates/confirm_reveal.html:5
+#: templates/confirm_reveal.html:16
 msgid "Reveal secret"
 msgstr "Révéler le secret"
 
 #: templates/create.html:5
 msgid "Create a secret"
-msgstr "Lire un secret"
+msgstr "Créer un secret"
+
+#: templates/create.html:15
+msgid "Leave a note or explanation for the recipient"
+msgstr "Laissez une note ou une explication pour le destinataire"
+
+#: templates/create.html:16
+msgid "This content will be displayed when the recipient opens the link"
+msgstr "Ce contenu sera affiché lorsque le destinataire ouvrira le lien"
 
 #: templates/create.html:19
-#, fuzzy
-msgid "Your secret message"
-msgstr "Votre mot de passe secret"
+msgid "Your note"
+msgstr "Votre note"
 
 #: templates/create.html:23
+msgid "Secret Message"
+msgstr "Votre message secret"
+
+#: templates/create.html:24
+msgid "The confidential information that you want to share"
+msgstr "Les informations confidentielles que vous souhaitez partager"
+
+#: templates/create.html:27
+msgid "Your secret message"
+msgstr "Votre message secret"
+
+#: templates/create.html:31 templates/create.html:34
 msgid "Time to live"
 msgstr "Durée de vie"
 
-#: templates/create.html:33
-msgid "optional"
-msgstr "optionnel"
+#: templates/create.html:32
+msgid ""
+"If the message is not seen before the end of this period it will be "
+"deleted"
+msgstr ""
+"Si le message n'est pas consulté avant la fin de cette période, il sera "
+"supprimé."
 
-#: templates/create.html:33
+#: templates/create.html:42 templates/create.html:53
+msgid "Optional"
+msgstr "facultatif"
+
+#: templates/create.html:42
 msgid "Password"
 msgstr "Mot de passe"
 
-#: templates/create.html:40
+#: templates/create.html:53
+msgid "Email"
+msgstr "E-mail"
+
+#: templates/create.html:56
+msgid "Recipient email"
+msgstr "E-mail du destinataire"
+
+#: templates/create.html:64
 msgid "Create"
 msgstr "Créer"
 
@@ -104,8 +157,8 @@ msgid ""
 "Your secret has been created. You can share this link to grant\n"
 "        someone access to read it."
 msgstr ""
-"Votre secret a été créé. Vous pouvez partager ce lien pour accorder à "
-"quelqu'un l'accès à sa lecture."
+"Votre secret a été créé. Vous pouvez partager ce lien pour donner\n"
+"        à quelqu'un l'accès pour le lire."
 
 #: templates/created.html:23
 msgid ""
@@ -113,15 +166,23 @@ msgid ""
 "        either after the chosen time to live expires or when someone "
 "opens the link."
 msgstr ""
-"Votre secret a été stocké sur le serveur et sera supprimé soit après "
-"l'expiration de la durée de vie choisie, soit lorsque quelqu'un ouvre le "
-"lien."
+"Votre secret a été stocké sur le serveur et sera supprimé\n"
+"        soit après la fin de la période de validité, soit lorsque "
+"quelqu'un ouvrira le lien."
 
 #: templates/created.html:25
 msgid "Therefore, the generated link can only be opened once."
 msgstr "Par conséquent, le lien généré ne peut être ouvert qu'une seule fois."
 
-#: templates/created.html:28 templates/error.html:20 templates/reveal.html:17
+#: templates/created.html:30
+msgid "A notification email has been sent to the provided address"
+msgstr "Un e-mail de notification a été envoyé à l'adresse fournie."
+
+#: templates/created.html:36
+msgid "An error occurred while sending the email."
+msgstr "Une erreur est survenue lors de l'envoi de l'e-mail."
+
+#: templates/created.html:40 templates/error.html:20 templates/reveal.html:26
 msgid "Create another secret"
 msgstr "Créer un autre secret"
 
@@ -130,6 +191,6 @@ msgid ""
 "This message is displayed only once and will not be available if this "
 "page is reloaded."
 msgstr ""
-"Ce message s'affiche une seule fois et ne sera pas disponible si cette "
+"Ce message est affiché une seule fois et ne sera pas disponible si cette "
 "page est rechargée."
 
